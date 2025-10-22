@@ -4,6 +4,21 @@ npm install
 Start the development server:
 npm start
 
+Features:
+User registration and login
+
+View list of available cars (with price, type, image)
+
+Book a car for specific dates
+
+Admin dashboard to add/edit/delete cars
+
+JWT-based authentication
+
+API integration with backend
+
+Responsive UI
+
 
 Car-rental/
 ├── node_modules/           ← created by npm install (not committed to Git)
@@ -30,19 +45,4 @@ Car-rental/
 │   ├── index.css         
 │   └── reportWebVitals.js
 
-
-Features:
-User registration and login
-
-View list of available cars (with price, type, image)
-
-Book a car for specific dates
-
-Admin dashboard to add/edit/delete cars
-
-JWT-based authentication
-
-API integration with backend
-
-Responsive UI
 
