@@ -1,36 +1,77 @@
 import { useNavigate } from 'react-router-dom';
+import API from '../services/api';
+import { useQuery } from '@tanstack/react-query';
+import useAuth from '../hooks/useAuth';
+import { Link } from 'react-router-dom';
 
-export default function CarCard({ car }) {
+export default function CarListPage() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
-  const handleBooking = () => {
-    navigate('/book', { state: { carId: car._id } });
+  const carsQuery = useQuery({
+    queryKey: ['cars'],
+    queryFn: async ({ signal }) => {
+      const res = await API.get('/cars', { signal });
+      return res.data;
+    },
+  });
+
+  const handleBooking = (car) => {
+    navigate('/book', {
+      state: {
+        carId: car?._id,
+        carDetails: {
+          name: car?.name,
+          type: car?.type,
+          price: car?.price,
+          imageUrl: car?.imageUrl,
+        },
+      },
+    });
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  const cars = carsQuery.data ?? [];
+  const isLoading = carsQuery.isPending;
+  const isError = carsQuery.isError;
+
+  if (isLoading) return <p>Loading cars...</p>;
+  if (isError) return <p>Failed to load cars.</p>;
+
   return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition duration-200 p-5 max-w-sm mx-auto">
-      <div className="w-full h-48 overflow-hidden rounded-md">
-        <img
-          src={car?.imageUrl}
-          alt={car?.name}
-          className="w-full h-full object-cover"
-        />
-      </div>
-
-      <div className="mt-4 space-y-1">
-        <h2 className="text-xl font-semibold text-gray-800">{car?.name}</h2>
-        <p className="text-sm text-gray-500">{car?.type}</p>
-        <p className="text-green-600 font-bold text-lg">₹{car?.price}/day</p>
-      </div>
-
-      <div className="mt-4 flex justify-between items-center">
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="flex justify-end gap-4 mb-6">
         <button
-          onClick={handleBooking}
-          className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onClick={handleLogout}
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
         >
-          Book Now
+          Logout
         </button>
-        <span className="text-xs text-gray-400">ID: {car?._id}</span>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {cars.map((car) => (
+          <div key={car?._id} className="bg-white shadow-md rounded-lg p-4">
+            <img
+              src={`http://localhost:5000${car?.imageUrl}`}
+              alt={car?.name}
+              className="w-full h-40 object-cover rounded"
+            />
+            <h2 className="text-xl font-semibold mt-2">{car?.name}</h2>
+            <p className="text-gray-600">{car?.type}</p>
+            <p className="text-green-600 font-bold">₹{car?.price}</p>
+            <button
+              onClick={() => handleBooking(car)}
+              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            >
+              Book Now
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
