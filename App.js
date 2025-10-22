@@ -1,13 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
 import useAuth from './hooks/useAuth';
-
 import Login from './pages/Login';
 import Register from './pages/Register';
 import CarList from './pages/CarList';
 import Dashboard from './pages/Dashboard';
-import BookingForm from './components/BookingForm';
-
+import BookingForm from './pages/BookingForm';
 import './index.css';
 
 function App() {
@@ -17,22 +14,23 @@ function App() {
 
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Register />} />
         <Route path="/cars" element={<CarList />} />
         <Route
           path="/dashboard"
-          element={user?.role === 'admin' ? <Dashboard /> : <Navigate to="/" />}
+          element={user?.role === 'admin' ? <Dashboard /> : <Navigate to="/login" />}
         />
 
         <Route
           path="/book"
-          element={user ? <BookingForm /> : <Navigate to="/" />}
+          element={user ? <BookingForm /> : <Navigate to="/login" />}
         />
+
       </Routes>
     </BrowserRouter>
 
   );
 }
 
-export default App;
+export default App
