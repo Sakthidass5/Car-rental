@@ -44,7 +44,7 @@ Car-rental/
 │   ├── index.js
 │   ├── index.css         
 │   └── reportWebVitals.js
-    └── App.test.js
-    └── App.css
+│   └── App.test.js
+│   └── App.css
 
 
