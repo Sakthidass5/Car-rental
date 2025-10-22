@@ -19,7 +19,7 @@ API integration with backend
 
 Responsive UI
 
-
+Folder Structure:
 Car-rental/
 ├── node_modules/           ← created by npm install (not committed to Git)
 ├── package-lock.json       ← created by npm install (commit to Git)
